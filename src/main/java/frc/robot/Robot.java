@@ -10,6 +10,9 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.ComponentBase;
+import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.PWMVictorSPX;
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -21,9 +24,14 @@ public class Robot extends TimedRobot {
 
   
   // Some important variables
-
   private static final String kDefaultAuto = "Default";
   private static final String kCustomAuto = "My Auto";
+  private static final int JOYSTICK_SLOT = 3;
+
+  private final PWMVictorSPX m_leftMotor = new PWMVictorSPX(0);
+  private final PWMVictorSPX m_rightMotor = new PWMVictorSPX(1);
+  private final DifferentialDrive m_robotDrive = new DifferentialDrive(m_leftMotor, m_rightMotor);
+  private final Joystick m_stick = new Joystick(JOYSTICK_SLOT);
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
@@ -88,12 +96,10 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    // Drive with arcade drive.
-    // That means that the Y axis drives forward
-    // and backward, and the X turns left and right.
     
+    // This loop is used to run the teleopPeriodic method in the ComponentBases stored in the components.
     for (ComponentBase base : components) {
-      base.update();
+      base.teleopPeriodic();
     }
 
   }
@@ -114,8 +120,28 @@ public class Robot extends TimedRobot {
   @Override
   public void testPeriodic() {}
 
-  public void addComponent(ComponentBase base) {
-    components.add(base);
+  /**
+   * This method is used to add a component to the Robot.
+   * @param component - The component you are adding to the robot.
+   */
+  public void addComponent(ComponentBase component) {
+    components.add(component);
+  }
+
+  /**
+   * 
+   * @return The joystick which is created from the slot: JOYSTICK_SLOT
+   */
+  public Joystick getJoystic() {
+    return m_stick;
+  }
+
+  /**
+   * 
+   * @return The Differential Drive containing the drive base's left and right motors.
+   */
+  public DifferentialDrive getDifferentialDrive() {
+    return m_robotDrive;
   }
 
 }
