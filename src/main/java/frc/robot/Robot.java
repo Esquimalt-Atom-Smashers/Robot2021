@@ -19,7 +19,7 @@ import frc.robot.ComponentBase;
  */
 public class Robot extends TimedRobot {
 
-
+  
   // Some important variables
 
   private static final String kDefaultAuto = "Default";
