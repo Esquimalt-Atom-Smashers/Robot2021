@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Robot extends TimedRobot {
 
   
+  
   // Some important variables
 
   private static final String kDefaultAuto = "Default";
