@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.ComponentBase;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PWMVictorSPX;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
@@ -26,12 +25,17 @@ public class Robot extends TimedRobot {
   // Some important variables
   private static final String kDefaultAuto = "Default";
   private static final String kCustomAuto = "My Auto";
-  private static final int JOYSTICK_SLOT = 3;
+
+  /** This variable controls whether or not the robot will ovveride the JOYSTICK_SLOT and instead looks through slots 0-10 looking for a valid joystick. */
+  private static final boolean FIND_JOYSTICK_SLOT = true;
+  /** This variable controls the usb slot we look for the joystick in, if FIND_JOYSTICK_SLOT is true then this will only be used as a backup. */
+  private static final int DEFAULT_JOYSTICK_SLOT = 3;
 
   private final PWMVictorSPX m_leftMotor = new PWMVictorSPX(0);
   private final PWMVictorSPX m_rightMotor = new PWMVictorSPX(1);
   private final DifferentialDrive m_robotDrive = new DifferentialDrive(m_leftMotor, m_rightMotor);
-  private final Joystick m_stick = new Joystick(JOYSTICK_SLOT);
+  private Joystick m_stick;
+
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
@@ -46,6 +50,19 @@ public class Robot extends TimedRobot {
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
+    if (FIND_JOYSTICK_SLOT) {
+      // This loop looks for a joystick in slots 0-10 breaking if it finds one and using the slot specified in DEFAULT_JOYSTICK_SLOT if none is found.
+      for (int i = 0; i < 10; i++) {
+        m_stick = new Joystick(i);
+        if (m_stick != null) {
+          break;
+        } else if (i == 9) {
+          m_stick = new Joystick(DEFAULT_JOYSTICK_SLOT);
+        }
+      }
+    } else {
+      m_stick = new Joystick(DEFAULT_JOYSTICK_SLOT);
+    }
   }
 
   /**
@@ -126,6 +143,15 @@ public class Robot extends TimedRobot {
    */
   public void addComponent(ComponentBase component) {
     components.add(component);
+  }
+
+  /**
+   * This method moves the robot using the DifferentialDrive by the given x and y
+   * @param moveAmount the amount the robot will move
+   * @param rotation the amount the robot will rotate
+   */
+  public void move(double moveAmount, double rotation) {
+    m_robotDrive.arcadeDrive(moveAmount, rotation);
   }
 
   /**

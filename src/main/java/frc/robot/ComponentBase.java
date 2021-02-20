@@ -1,7 +1,5 @@
 package frc.robot;
 
-import frc.robot.Robot;
-
 /**
  * This class is used to create a component which interacts with the Robot specified in the contsrtucor.
  * To implement this class create a class which extends this and implement all the methods.

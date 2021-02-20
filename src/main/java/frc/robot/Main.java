@@ -28,7 +28,7 @@ public final class Main {
 
     RobotBase.startRobot(() -> {
       Robot robot = new Robot();
-      robot.addComponent(new DrivetrainComponent(robot));
+      robot.addComponent(new MovementComponent(robot));
       return robot;
     });
 
