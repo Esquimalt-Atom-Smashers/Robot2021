@@ -27,7 +27,7 @@ public class Robot extends TimedRobot {
   private static final String kCustomAuto = "My Auto";
 
   /** This variable controls whether or not the robot will ovveride the JOYSTICK_SLOT and instead looks through slots 0-10 looking for a valid joystick. */
-  private static final boolean FIND_JOYSTICK_SLOT = true;
+  private static final boolean FIND_JOYSTICK_SLOT = false;
   /** This variable controls the usb slot we look for the joystick in, if FIND_JOYSTICK_SLOT is true then this will only be used as a backup. */
   private static final int DEFAULT_JOYSTICK_SLOT = 3;
 

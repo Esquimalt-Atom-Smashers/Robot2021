@@ -50,6 +50,55 @@ public class Instruction {
     public void setWaitAfter(int waitAfter) {
         this.waitAfter = waitAfter;
     }
+
+    @Override
+    public String toString() {
+        return "Instruction@" + hashCode() + "{moveAmount: " + moveAmount + ", rotateAmount" + rotateAmount
+            + "";
+    }
+
+    public static Instruction fromLine(String line) {
+        line = line.trim().toLowerCase();
+        double moveAmount = 0;
+        double rotateAmount = 0;
+        int wait = 0;
+        if (line.contains("move")) {
+            String portion = line.substring(line.indexOf("move") + 4);
+            Double amount = firstNumber(portion);
+            if (amount != null) {
+                moveAmount = amount;
+            }
+        }
+        if (line.contains("rotate")) {
+            String portion = line.substring(line.indexOf("rotate") + 6);
+            Double amount = firstNumber(portion);
+            if (amount != null) {
+                rotateAmount = amount;
+            }
+        }
+        if (line.contains("wait")) {
+            String portion = line.substring(line.indexOf("wait") + 4);
+            Double amount = firstNumber(portion);
+            if (amount != null) {
+                wait = amount.intValue();
+            }
+        }
+        return new Instruction(moveAmount, rotateAmount, wait, 0);
+    }
+
+    private static Double firstNumber(String line) {
+        line = line.trim();
+        String[] spaceSplit = line.split(" ");
+        if (spaceSplit.length >= 1) {
+            try {
+                return Double.parseDouble(spaceSplit[0]);
+            } catch (Exception ignore) {
+                return null;
+            }
+        }
+        return null;
+    }
+
 }
 
 
