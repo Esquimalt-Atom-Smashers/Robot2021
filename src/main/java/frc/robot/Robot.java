@@ -170,4 +170,11 @@ public class Robot extends TimedRobot {
     return m_robotDrive;
   }
 
+  public PWMVictorSPX getLeftMotor() {
+    return m_leftMotor;
+  }
+  public PWMVictorSPX getRightMotor() {
+    return m_rightMotor;
+  }
+
 }
