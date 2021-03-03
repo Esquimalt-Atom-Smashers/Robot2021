@@ -17,4 +17,6 @@ public class UltrasonicComponent {
     double ultraVal = ultrasonic.getValue(); // Gets distance val from ultrasonic between 0-4095 (0V-5V)
     double currentDistance = ultraVal / distConst; // Gives dist in CM
 
+    System.out.println(currentDistance);
+    
 }
