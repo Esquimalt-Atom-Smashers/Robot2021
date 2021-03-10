@@ -32,11 +32,11 @@ public final class Main {
       Robot robot = new Robot();
       robot.addComponent(new MovementComponent(robot));
       // robot.addComponent(new UltrasonicComponent(robot));
-      try {
-        robot.addComponent(PatternAutonomous.createFromFile("simple instructions.txt", robot));
-      } catch (FileNotFoundException e) {
-        e.printStackTrace();
-      }
+      // try {
+      //   robot.addComponent(PatternAutonomous.createFromFile("simple instructions.txt", robot));
+      // } catch (FileNotFoundException e) {
+      //   e.printStackTrace();
+      // }
       return robot;
     });
 

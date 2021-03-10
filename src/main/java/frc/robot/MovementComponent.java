@@ -25,25 +25,12 @@ public class MovementComponent extends ComponentBase {
         double ultraVal = ultrasonic.getValue(); // Gets distance val from ultrasonic between 0-4095 (0V-5V)
         double currentDistance = ultraVal / distConst; // Gives dist in CM
 
-        double multiplier = 1;
-        double rightspeed=robot.getRightMotor().get();
-        double leftspeed=robot.getLeftMotor().get();
-        double speed;
-        speed=(rightspeed+leftspeed)*5;
-        if (currentDistance <= 125 / Math.max(1,-(10+speed))) {
-            multiplier = currentDistance / (500 / -speed);
-        }
-
-        System.out.println("Dist: " + currentDistance + " Multiplier: " + multiplier + " Spd: " + speed);
-        double moveY = -stick.getY();
-        if (moveY > 0) {
-            moveY *= multiplier;
-        }
-
-        
-
-        if (moveY > 0 && currentDistance <= 50/-speed) {
-            moveY = -moveY;
+        double moveY = 0;
+        System.out.println("CD: " + currentDistance + " UltraVal: " + ultraVal);
+        if(currentDistance<=100 && stick.getRawButton(3)){
+            moveY = -0.5;
+        } else if (currentDistance > 100) {
+            moveY = -stick.getY();
         }
         
         robot.move(moveY, ALTERNATE_ROTATE ? stick.getZ() : stick.getY());
