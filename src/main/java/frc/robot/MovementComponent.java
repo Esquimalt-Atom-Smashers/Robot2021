@@ -34,9 +34,7 @@ public class MovementComponent extends ComponentBase {
 
         
         if (stick.getRawButton(4)) { //Autonomous mode switcher, Button 4 is Y
-            if (autoDrive == false)
-                autoDrive = true;
-            else autoDrive = false;
+            autoDrive = !autoDrive;
         }
 
         double moveY = 0; // Fwd/bkwd movement
@@ -52,14 +50,12 @@ public class MovementComponent extends ComponentBase {
         if (autoDrive == false) {
             if (currentDistance >= 200) {
                 moveY = -stick.getY();
-            }
-            else if (currentDistance < 50) {
+            } else if (currentDistance < 50) {
                 moveY = 0;
                 if (stick.getRawButton(3)) {
                     moveY = -0.5;
                 }
-            }
-            else if (currentDistance < 200) {
+            } else if (currentDistance < 200) {
                 moveY = -stick.getY() / (currentDistance / 50);
             }
             robot.move(moveY, ALTERNATE_ROTATE ? stick.getZ() : stick.getY());
@@ -67,19 +63,20 @@ public class MovementComponent extends ComponentBase {
 
         // Autonomous mode with fail safes
         if (autoDrive == true) {
-            if (stick.getRawButton(3))
+            if (stick.getRawButton(3)) {
                 moveY = 0;
-            else if (stick.getZ() != 0)
+            } else if (stick.getZ() != 0) {
                 moveZ = stick.getZ();
-            else if (currentDistance >= 75)
+            } else if (currentDistance >= 75) {
                 moveY = 0.5;
-            else if (currentDistance < 75)
+            } else if (currentDistance < 75) {
                 moveZ = 0.5;
+            }
             robot.move(moveY, ALTERNATE_ROTATE ? moveZ : stick.getY());
         }
         
-            // robot.move(moveY, ALTERNATE_ROTATE ? stick.getZ() : stick.getY());
-            // robot.move(moveY, ALTERNATE_ROTATE ? moveZ : stick.getY());
+        // robot.move(moveY, ALTERNATE_ROTATE ? stick.getZ() : stick.getY());
+        // robot.move(moveY, ALTERNATE_ROTATE ? moveZ : stick.getY());
     }
     
 }
