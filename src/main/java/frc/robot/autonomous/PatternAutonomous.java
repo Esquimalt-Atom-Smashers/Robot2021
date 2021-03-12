@@ -2,7 +2,6 @@ package frc.robot.autonomous;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.nio.file.FileSystem;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
