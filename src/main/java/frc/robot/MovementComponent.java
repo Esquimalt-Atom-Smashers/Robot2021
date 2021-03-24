@@ -29,19 +29,20 @@ public class MovementComponent extends ComponentBase {
     @Override
     public void teleopPeriodic() {
         Joystick stick = robot.getJoystic();
-        double ultraVal = ultrasonic.getValue(); // Gets distance val from ultrasonic between 0-4095 (0V-5V)
-        double currentDistance = ultraVal / distConst; // Gives dist in CM
+        robot.move(stick.getY(), stick.getX());
+        // double ultraVal = ultrasonic.getValue(); // Gets distance val from ultrasonic between 0-4095 (0V-5V)
+        // double currentDistance = ultraVal / distConst; // Gives dist in CM
 
         
-        if (stick.getRawButton(4)) { //Autonomous mode switcher, Button 4 is Y
-            if (autoDrive == false)
-                autoDrive = true;
-            else autoDrive = false;
-        }
+        // if (stick.getRawButton(4)) { //Autonomous mode switcher, Button 4 is Y
+        //     if (autoDrive == false)
+        //         autoDrive = true;
+        //     else autoDrive = false;
+        // }
 
-        double moveY = 0; // Fwd/bkwd movement
-        double moveZ = 0; // rotate movement
-        System.out.println("CD: " + currentDistance + " UltraVal: " + ultraVal + " Stick Y:" + stick.getY());
+        // double moveY = 0; // Fwd/bkwd movement
+        // double moveZ = 0; // rotate movement
+        // System.out.println("CD: " + currentDistance + " UltraVal: " + ultraVal + " Stick Y:" + stick.getY());
         // if(currentDistance<=100 && stick.getRawButton(3)){
         //     moveY = -0.5; // Backup half speed
         // } else if (currentDistance > 100) {
@@ -49,34 +50,34 @@ public class MovementComponent extends ComponentBase {
         // }
         
         //Regular Driving Mode
-        if (autoDrive == false) {
-            if (currentDistance >= 200) {
-                moveY = -stick.getY();
-            }
-            else if (currentDistance < 50) {
-                moveY = 0;
-                if (stick.getRawButton(3)) {
-                    moveY = -0.5;
-                }
-            }
-            else if (currentDistance < 200) {
-                moveY = -stick.getY() / (currentDistance / 50);
-            }
-            robot.move(moveY, ALTERNATE_ROTATE ? stick.getZ() : stick.getY());
-        }
+        // if (autoDrive == false) {
+        //     if (currentDistance >= 200) {
+        //         moveY = -stick.getY();
+        //     }
+        //     else if (currentDistance < 50) {
+        //         moveY = 0;
+        //         if (stick.getRawButton(3)) {
+        //             moveY = -0.5;
+        //         }
+        //     }
+        //     else if (currentDistance < 200) {
+        //         moveY = -stick.getY() / (currentDistance / 50);
+        //     }
+        //     robot.move(moveY, ALTERNATE_ROTATE ? stick.getZ() : stick.getY());
+        // }
 
         // Autonomous mode with fail safes
-        if (autoDrive == true) {
-            if (stick.getRawButton(3))
-                moveY = 0;
-            else if (stick.getZ() != 0)
-                moveZ = stick.getZ();
-            else if (currentDistance >= 75)
-                moveY = 0.5;
-            else if (currentDistance < 75)
-                moveZ = 0.5;
-            robot.move(moveY, ALTERNATE_ROTATE ? moveZ : stick.getY());
-        }
+        // if (autoDrive == true) {
+        //     if (stick.getRawButton(3))
+        //         moveY = 0;
+        //     else if (stick.getZ() != 0)
+        //         moveZ = stick.getZ();
+        //     else if (currentDistance >= 75)
+        //         moveY = 0.5;
+        //     else if (currentDistance < 75)
+        //         moveZ = 0.5;
+        //     robot.move(moveY, ALTERNATE_ROTATE ? moveZ : stick.getY());
+        // }
         
             // robot.move(moveY, ALTERNATE_ROTATE ? stick.getZ() : stick.getY());
             // robot.move(moveY, ALTERNATE_ROTATE ? moveZ : stick.getY());

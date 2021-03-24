@@ -6,11 +6,15 @@ package frc.robot;
 
 import java.util.ArrayList;
 
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
+import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
+
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PWMVictorSPX;
+import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 
 /**
@@ -31,15 +35,20 @@ public class Robot extends TimedRobot {
   /** This variable controls the usb slot we look for the joystick in, if FIND_JOYSTICK_SLOT is true then this will only be used as a backup. */
   private static final int DEFAULT_JOYSTICK_SLOT = 3;
 
-  private final PWMVictorSPX m_leftMotor = new PWMVictorSPX(0);
-  private final PWMVictorSPX m_rightMotor = new PWMVictorSPX(1);
+  private final PWMVictorSPX m_leftMotor = new PWMVictorSPX(1);
+  private final PWMVictorSPX m_rightMotor = new PWMVictorSPX(3);
   private final DifferentialDrive m_robotDrive = new DifferentialDrive(m_leftMotor, m_rightMotor);
   private Joystick m_stick;
+
+  private final WPI_VictorSPX clpMotor = new WPI_VictorSPX(2);
+  private final Servo actuatorServo = new Servo(0);
 
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
   private final ArrayList<ComponentBase> components = new ArrayList<>();
+
+  private boolean disabled = true;
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -73,7 +82,14 @@ public class Robot extends TimedRobot {
    * SmartDashboard integrated updating.
    */
   @Override
-  public void robotPeriodic() {}
+  public void robotPeriodic() {
+    if (disabled) {
+      disabled = false;
+      for (ComponentBase component : components) {
+        component.enabled();
+      }
+    }
+  }
 
   /**
    * This autonomous (along with the chooser code above) shows how to select between different
@@ -123,7 +139,9 @@ public class Robot extends TimedRobot {
 
   /** This function is called once when the robot is disabled. */
   @Override
-  public void disabledInit() {}
+  public void disabledInit() {
+    disabled = true;
+  }
 
   /** This function is called periodically when disabled. */
   @Override
@@ -175,6 +193,14 @@ public class Robot extends TimedRobot {
   }
   public PWMVictorSPX getRightMotor() {
     return m_rightMotor;
+  }
+
+  public WPI_VictorSPX getClpMotor() {
+    return clpMotor;
+  }
+
+  public Servo getActuatorServo() {
+    return actuatorServo;
   }
 
 }
