@@ -32,7 +32,7 @@ public class MovementComponent extends ComponentBase {
     @Override
     public void teleopPeriodic() {
         Joystick stick = robot.getJoystic();
-<<<<<<< HEAD
+
         robot.move(stick.getY(), stick.getX());
         // double ultraVal = ultrasonic.getValue(); // Gets distance val from ultrasonic between 0-4095 (0V-5V)
         // double currentDistance = ultraVal / distConst; // Gives dist in CM
@@ -47,7 +47,7 @@ public class MovementComponent extends ComponentBase {
         // double moveY = 0; // Fwd/bkwd movement
         // double moveZ = 0; // rotate movement
         // System.out.println("CD: " + currentDistance + " UltraVal: " + ultraVal + " Stick Y:" + stick.getY());
-=======
+
         robot.move(backwards ? -stick.getY() : stick.getY(), ALTERNATE_ROTATE ? stick.getZ() : stick.getY());
         if (stick.getRawButton(4) && timerCount <= 0) {
             timerCount = 100;
@@ -65,7 +65,6 @@ public class MovementComponent extends ComponentBase {
         //double moveY = 0; // Fwd/bkwd movement
         //double moveZ = 0; // rotate movement
         //System.out.println("CD: " + currentDistance + " UltraVal: " + ultraVal + " Stick Y:" + stick.getY());
->>>>>>> 21f618119270a5f605ce59a8e5871aeaaa537176
         // if(currentDistance<=100 && stick.getRawButton(3)){
         //     moveY = -0.5; // Backup half speed
         // } else if (currentDistance > 100) {
@@ -76,22 +75,16 @@ public class MovementComponent extends ComponentBase {
         // if (autoDrive == false) {
         //     if (currentDistance >= 200) {
         //         moveY = -stick.getY();
-<<<<<<< HEAD
         //     }
         //     else if (currentDistance < 50) {
-=======
         //     } else if (currentDistance < 50) {
->>>>>>> 21f618119270a5f605ce59a8e5871aeaaa537176
         //         moveY = 0;
         //         if (stick.getRawButton(3)) {
         //             moveY = -0.5;
         //         }
-<<<<<<< HEAD
         //     }
         //     else if (currentDistance < 200) {
-=======
         //     } else if (currentDistance < 200) {
->>>>>>> 21f618119270a5f605ce59a8e5871aeaaa537176
         //         moveY = -stick.getY() / (currentDistance / 50);
         //     }
         //     robot.move(moveY, ALTERNATE_ROTATE ? stick.getZ() : stick.getY());
@@ -99,7 +92,6 @@ public class MovementComponent extends ComponentBase {
 
         // Autonomous mode with fail safes
         // if (autoDrive == true) {
-<<<<<<< HEAD
         //     if (stick.getRawButton(3))
         //         moveY = 0;
         //     else if (stick.getZ() != 0)
@@ -108,7 +100,6 @@ public class MovementComponent extends ComponentBase {
         //         moveY = 0.5;
         //     else if (currentDistance < 75)
         //         moveZ = 0.5;
-=======
         //     if (stick.getRawButton(3)) {
         //         moveY = 0;
         //     } else if (stick.getZ() != 0) {
@@ -118,7 +109,6 @@ public class MovementComponent extends ComponentBase {
         //     } else if (currentDistance < 75) {
         //         moveZ = 0.5;
         //     }
->>>>>>> 21f618119270a5f605ce59a8e5871aeaaa537176
         //     robot.move(moveY, ALTERNATE_ROTATE ? moveZ : stick.getY());
         // }
         

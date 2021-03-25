@@ -40,7 +40,7 @@ public class Robot extends TimedRobot {
   private final DifferentialDrive m_robotDrive = new DifferentialDrive(m_leftMotor, m_rightMotor);
   private Joystick m_stick;
 
-  private final WPI_VictorSPX clpMotor = new WPI_VictorSPX(2);
+  private final WPI_VictorSPX clpMotor = new WPI_VictorSPX(5);
   private final Servo actuatorServo = new Servo(0);
 
   private String m_autoSelected;

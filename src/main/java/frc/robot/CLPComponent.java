@@ -9,7 +9,9 @@ public class CLPComponent extends ComponentBase {
     @Override
     public void teleopPeriodic() {
         if (robot.getJoystic().getRawButton(3)) {
-            robot.getClpMotor().set(1);
+            robot.getClpMotor().set(0.7);
+        } else {
+            robot.getClpMotor().set(0);
         }
     }
     
