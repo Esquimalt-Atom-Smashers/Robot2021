@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.PWMVictorSPX;
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 
+
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
  * each mode, as described in the TimedRobot documentation. If you change the name of this class or
@@ -41,7 +42,11 @@ public class Robot extends TimedRobot {
   private Joystick m_stick;
 
   private final WPI_VictorSPX clpMotor = new WPI_VictorSPX(5);
-  private final Servo actuatorServo = new Servo(0);
+  private final Servo actuatorServoRight = new Servo(0);
+  private final Servo actuatorServoCenter = new Servo(6); //we may need to move these around along with the Spark motor controller cables based on where we want to put them
+  private final Servo actuatorServoLeft = new Servo(7); 
+
+
 
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
@@ -49,6 +54,7 @@ public class Robot extends TimedRobot {
   private final ArrayList<ComponentBase> components = new ArrayList<>();
 
   private boolean disabled = true;
+
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -199,8 +205,17 @@ public class Robot extends TimedRobot {
     return clpMotor;
   }
 
-  public Servo getActuatorServo() {
-    return actuatorServo;
+  public Servo getActuatorServoRight() {
+    return actuatorServoRight;
   }
+
+  public Servo getActuatorServoCenter() {
+    return actuatorServoCenter;
+  }
+
+  public Servo getActuatorServoLeft() {
+    return actuatorServoLeft;
+  }
+
 
 }
