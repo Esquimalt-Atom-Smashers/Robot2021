@@ -2,7 +2,7 @@ package frc.robot;
 
 //import jdk.internal.jshell.tool.resources.l10n; this was giving an error Zev, had to comment it out - Kyle
 
-import edu.wpi.first.wpilibj.XboxController; //need to figure out how to use D-Pad - Kyle
+import edu.wpi.first.wpilibj.XboxController; //need to figure out how to use D-Pad for manually controling the actuators - Kyle
 
 public class ActuatorComponent extends ComponentBase {
     private XboxController xboxcontroller;
@@ -11,8 +11,8 @@ public class ActuatorComponent extends ComponentBase {
     private final static double MAX_ANGLE = 145;
     private final static double MIN_ANGLE = 30;
     private final static double POSITION_1 = 1; //placeholder
-    private final static double POSITION_2 = 2; //place holder
-    private final static double POSITION_3 = 3; //place holder
+    private final static double POSITION_2 = 2; //placeholder
+    private final static double POSITION_3 = 3; //placeholder
 
     public ActuatorComponent(Robot robot) {
         super(robot);
