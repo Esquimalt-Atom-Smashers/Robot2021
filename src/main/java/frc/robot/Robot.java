@@ -56,7 +56,7 @@ public class Robot extends TimedRobot {
     private Joystick m_stick;
     private XboxController xboxController = new XboxController(DEFAULT_JOYSTICK_SLOT);
 
-    private final WPI_VictorSPX clpMotor = new WPI_VictorSPX(1);
+    private final CLPMotors clpMotors = new CLPMotors(1, 2);
     private final Servos actuatorServos = new Servos(7, 8, 9);
 
     /***************************
@@ -269,8 +269,8 @@ public class Robot extends TimedRobot {
         return m_rightMotor;
     }
 
-    public WPI_VictorSPX getClpMotor() {
-        return clpMotor;
+    public CLPMotors getClpMotors() {
+        return clpMotors;
     }
 
     public Servos getActuatorServos() {

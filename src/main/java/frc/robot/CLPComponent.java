@@ -8,9 +8,9 @@ public class CLPComponent extends ComponentBase {
         super(robot);
         
         robot.setOnButtonPressed(3, EventHandler.combine(event ->
-            robot.getClpMotor().set(1)
+            robot.getClpMotors().set(1)
         , () ->
-            robot.getClpMotor().set(0)
+            robot.getClpMotors().set(0)
         ));
 
         
