@@ -12,6 +12,8 @@ public class CLPComponent extends ComponentBase {
         , () ->
             robot.getClpMotor().set(0)
         ));
+
+        
     }
     
 }

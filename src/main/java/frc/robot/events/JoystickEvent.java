@@ -11,5 +11,9 @@ abstract class JoystickEvent extends Event {
         super(robot);
         this.stick = stick;
     }
+
+    public Joystick getStick() {
+        return stick;
+    }
     
 }

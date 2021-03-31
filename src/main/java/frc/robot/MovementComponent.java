@@ -31,7 +31,7 @@ public class MovementComponent extends ComponentBase {
 
     @Override
     public void teleopPeriodic() {
-        Joystick stick = robot.getJoystic();
+        Joystick stick = robot.getJoystick();
 
         //robot.move(stick.getY(), stick.getX());
         // Temporary

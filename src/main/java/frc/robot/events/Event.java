@@ -10,4 +10,8 @@ abstract class Event {
         this.robot = robot;
     }
 
+    public Robot getRobot() {
+        return robot;
+    }
+
 }

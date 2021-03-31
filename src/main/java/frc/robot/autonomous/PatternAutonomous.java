@@ -36,7 +36,7 @@ public class PatternAutonomous extends ComponentBase {
 
     @Override
     public void teleopPeriodic() {
-        if (robot.getJoystic().getRawButton(START_BUTTON)) {
+        if (robot.getJoystick().getRawButton(START_BUTTON)) {
             instructions.clear();
             instructions.addAll((Collection<Instruction>) originalInstructions.clone());
         }

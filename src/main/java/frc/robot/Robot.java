@@ -11,10 +11,14 @@ import java.util.Optional;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.events.ButtonEvent;
+import frc.robot.events.DpadEvent;
 import frc.robot.events.EventHandler;
+import frc.robot.events.SingleStickEvent;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PWMVictorSPX;
 import edu.wpi.first.wpilibj.Servo;
@@ -41,12 +45,20 @@ public class Robot extends TimedRobot {
   private final PWMVictorSPX m_leftMotor = new PWMVictorSPX(1);
   private final PWMVictorSPX m_rightMotor = new PWMVictorSPX(3);
   private final DifferentialDrive m_robotDrive = new DifferentialDrive(m_leftMotor, m_rightMotor);
+
   private Joystick m_stick;
+  private XboxController xboxController = new XboxController(DEFAULT_JOYSTICK_SLOT);
 
   private final WPI_VictorSPX clpMotor = new WPI_VictorSPX(1);
   private final Servos actuatorServos = new Servos();
   
+  /***************************
+   *     Event Variables
+   ***************************/
   private final HashMap<Integer, EventHandler<ButtonEvent>> eventMap = new HashMap<>();
+  private EventHandler<SingleStickEvent> leftStickHandler;
+  private EventHandler<SingleStickEvent> rightStickHandler;
+  private EventHandler<DpadEvent> dpadHandler;
 
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
@@ -137,11 +149,37 @@ public class Robot extends TimedRobot {
     
     // This loop is used to run the teleopPeriodic method in the ComponentBases stored in the components.
     components.forEach(ComponentBase::teleopPeriodic);
+
+    // This loop is used to properly activate the event handlers in the button map.
     for (int key : eventMap.keySet()) {
       if (m_stick.getRawButton(key)) {
         eventMap.get(key).receive(new ButtonEvent(this, m_stick, key));
       } else {
         eventMap.get(key).otherwise();
+      }
+    }
+
+    if (leftStickHandler != null) {
+      if (m_stick.getY() != 0 || m_stick.getX() != 0) {
+        leftStickHandler.receive(new SingleStickEvent(this, m_stick, m_stick.getY(), m_stick.getX()));
+      } else {
+        leftStickHandler.otherwise();
+      }
+    }
+    
+    if (rightStickHandler != null) {
+      if (m_stick.getY(Hand.kLeft) != 0 || m_stick.getX(Hand.kLeft) != 0) {
+        rightStickHandler.receive(new SingleStickEvent(this, m_stick, m_stick.getY(Hand.kLeft), m_stick.getX(Hand.kLeft)));
+      } else {
+        rightStickHandler.otherwise();
+      }
+    }
+
+    if (dpadHandler != null) {
+      if (m_stick.getPOV() != -1) {
+        dpadHandler.receive(new DpadEvent(this, m_stick, m_stick.getPOV()));
+      } else {
+        dpadHandler.otherwise();
       }
     }
 
@@ -186,8 +224,12 @@ public class Robot extends TimedRobot {
    * 
    * @return The joystick which is created from the slot: JOYSTICK_SLOT
    */
-  public Joystick getJoystic() {
+  public Joystick getJoystick() {
     return m_stick;
+  }
+
+  public XboxController getXboxController() {
+    return xboxController;
   }
 
   /**
@@ -223,5 +265,16 @@ public class Robot extends TimedRobot {
       return Optional.empty();
     }
   }
+
+  public void setOnLeftStickMoved(EventHandler<SingleStickEvent> handler) {
+    this.leftStickHandler = handler;
+  }
+  public void setOnRightStickMoved(EventHandler<SingleStickEvent> handler) {
+    this.rightStickHandler = handler;
+  }
+  public void setOnDpadMoved(EventHandler<DpadEvent> dpadEventHandler) {
+    this.dpadHandler = dpadEventHandler;
+  }
+  
 
 }
