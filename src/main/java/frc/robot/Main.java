@@ -30,7 +30,7 @@ public final class Main {
 
     RobotBase.startRobot(() -> {
       Robot robot = new Robot();
-      robot.addComponent(new MovementComponent(robot));
+      // robot.addComponent(new MovementComponent(robot));
       robot.addComponent(new CLPComponent(robot));
       // robot.addComponent(new UltrasonicComponent(robot));
       // try {

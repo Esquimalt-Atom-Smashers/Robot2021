@@ -33,7 +33,10 @@ public class MovementComponent extends ComponentBase {
     public void teleopPeriodic() {
         Joystick stick = robot.getJoystic();
 
-        robot.move(stick.getY(), stick.getX());
+        //robot.move(stick.getY(), stick.getX());
+        // Temporary
+
+
         // double ultraVal = ultrasonic.getValue(); // Gets distance val from ultrasonic between 0-4095 (0V-5V)
         // double currentDistance = ultraVal / distConst; // Gives dist in CM
 
@@ -48,12 +51,16 @@ public class MovementComponent extends ComponentBase {
         // double moveZ = 0; // rotate movement
         // System.out.println("CD: " + currentDistance + " UltraVal: " + ultraVal + " Stick Y:" + stick.getY());
 
-        robot.move(backwards ? -stick.getY() : stick.getY(), ALTERNATE_ROTATE ? stick.getZ() : stick.getY());
-        if (stick.getRawButton(4) && timerCount <= 0) {
-            timerCount = 100;
-        } else {
-            timerCount--;
-        }
+        
+        
+        // robot.move(backwards ? -stick.getY() : stick.getY(), ALTERNATE_ROTATE ? stick.getZ() : stick.getY());
+        // if (stick.getRawButton(4) && timerCount <= 0) {
+        //     timerCount = 100;
+        // } else {
+        //     timerCount--;
+        // }
+        // Temporary 
+
         //double ultraVal = ultrasonic.getValue(); // Gets distance val from ultrasonic between 0-4095 (0V-5V)
         //double currentDistance = ultraVal / distConst; // Gives dist in CM
 
@@ -114,6 +121,9 @@ public class MovementComponent extends ComponentBase {
         
         // robot.move(moveY, ALTERNATE_ROTATE ? stick.getZ() : stick.getY());
         // robot.move(moveY, ALTERNATE_ROTATE ? moveZ : stick.getY());
+        
+                System.out.println("D-pad" + stick.getPOV());
+
     }
     
 }

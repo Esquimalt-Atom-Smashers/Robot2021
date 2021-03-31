@@ -1,18 +1,17 @@
 package frc.robot;
 
+import frc.robot.events.EventHandler;
+
 public class CLPComponent extends ComponentBase {
 
     public CLPComponent(Robot robot) {
         super(robot);
-    }
-
-    @Override
-    public void teleopPeriodic() {
-        if (robot.getJoystic().getRawButton(3)) {
-            robot.getClpMotor().set(0.7);
-        } else {
-            robot.getClpMotor().set(0);
-        }
+        
+        robot.setOnButtonPressed(3, EventHandler.combine(event ->
+            robot.getClpMotor().set(1)
+        , () ->
+            robot.getClpMotor().set(0)
+        ));
     }
     
 }

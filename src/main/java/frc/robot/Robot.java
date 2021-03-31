@@ -5,18 +5,20 @@
 package frc.robot;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Optional;
 
-import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.events.ButtonEvent;
+import frc.robot.events.EventHandler;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PWMVictorSPX;
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -41,12 +43,10 @@ public class Robot extends TimedRobot {
   private final DifferentialDrive m_robotDrive = new DifferentialDrive(m_leftMotor, m_rightMotor);
   private Joystick m_stick;
 
-  private final WPI_VictorSPX clpMotor = new WPI_VictorSPX(5);
-  private final Servo actuatorServoRight = new Servo(0);
-  private final Servo actuatorServoCenter = new Servo(6); //we may need to move these around along with the Spark motor controller cables based on where we want to put them
-  private final Servo actuatorServoLeft = new Servo(7); 
-
-
+  private final WPI_VictorSPX clpMotor = new WPI_VictorSPX(1);
+  private final Servos actuatorServos = new Servos();
+  
+  private final HashMap<Integer, EventHandler<ButtonEvent>> eventMap = new HashMap<>();
 
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
@@ -54,7 +54,6 @@ public class Robot extends TimedRobot {
   private final ArrayList<ComponentBase> components = new ArrayList<>();
 
   private boolean disabled = true;
-
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -137,8 +136,13 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     
     // This loop is used to run the teleopPeriodic method in the ComponentBases stored in the components.
-    for (ComponentBase base : components) {
-      base.teleopPeriodic();
+    components.forEach(ComponentBase::teleopPeriodic);
+    for (int key : eventMap.keySet()) {
+      if (m_stick.getRawButton(key)) {
+        eventMap.get(key).receive(new ButtonEvent(this, m_stick, key));
+      } else {
+        eventMap.get(key).otherwise();
+      }
     }
 
   }
@@ -205,17 +209,19 @@ public class Robot extends TimedRobot {
     return clpMotor;
   }
 
-  public Servo getActuatorServoRight() {
-    return actuatorServoRight;
+  public Servos getActuatorServos() {
+    return actuatorServos;
   }
 
-  public Servo getActuatorServoCenter() {
-    return actuatorServoCenter;
+  public void setOnButtonPressed(int button, EventHandler<ButtonEvent> handler) {
+    eventMap.put(button, handler);
   }
-
-  public Servo getActuatorServoLeft() {
-    return actuatorServoLeft;
+  public Optional<EventHandler<ButtonEvent>> getOnButtonPressed(int button) {
+    if (eventMap.containsKey(button)) {
+      return Optional.of(eventMap.get(button));
+    } else {
+      return Optional.empty();
+    }
   }
-
 
 }
