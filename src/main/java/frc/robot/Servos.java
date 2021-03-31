@@ -1,5 +1,6 @@
 package frc.robot;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -13,6 +14,13 @@ public class Servos {
 
     public Servos(Servo... servos) {
         this(Arrays.asList(servos));
+    }
+    public Servos(int... ports) {
+        List<Servo> servos = new ArrayList<>();
+        for (int port : ports) {
+            servos.add(new Servo(port));
+        }
+        this.servos.addAll(servos);
     }
 
     public Servos(Collection<Servo> servos) {
