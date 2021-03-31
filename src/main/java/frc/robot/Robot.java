@@ -56,8 +56,8 @@ public class Robot extends TimedRobot {
     private Joystick m_stick;
     private XboxController xboxController = new XboxController(DEFAULT_JOYSTICK_SLOT);
 
-    private final CLPMotors clpMotors = new CLPMotors(1, 2);
-    private final Servos actuatorServos = new Servos(7, 8, 9);
+    private final CLPMotors clpMotors = new CLPMotors(6);
+    private final Servos actuatorServos = new Servos(7, 8, 9, 0);
 
     /***************************
      * Event Variables

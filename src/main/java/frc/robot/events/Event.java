@@ -2,7 +2,7 @@ package frc.robot.events;
 
 import frc.robot.Robot;
 
-abstract class Event {
+public abstract class Event {
     
     private final Robot robot;
 
