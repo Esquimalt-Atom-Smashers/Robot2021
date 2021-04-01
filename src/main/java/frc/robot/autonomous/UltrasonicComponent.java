@@ -1,6 +1,8 @@
-package frc.robot;
+package frc.robot.autonomous;
 
 import edu.wpi.first.wpilibj.AnalogInput;
+import frc.robot.ComponentBase;
+import frc.robot.Robot;
 
 /*
     I realize we might be using multiple of these so maybe better make a creator for them

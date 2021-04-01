@@ -1,5 +1,7 @@
-package frc.robot;
+package frc.robot.servos;
 
+import frc.robot.ComponentBase;
+import frc.robot.Robot;
 import frc.robot.events.Events;
 
 public class ActuatorComponent extends ComponentBase {

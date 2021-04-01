@@ -1,5 +1,7 @@
-package frc.robot;
+package frc.robot.clp;
 
+import frc.robot.ComponentBase;
+import frc.robot.Robot;
 import frc.robot.events.EventHandler;
 
 public class CLPComponent extends ComponentBase {

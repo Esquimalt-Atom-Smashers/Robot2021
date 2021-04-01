@@ -4,11 +4,8 @@
 
 package frc.robot;
 
-import java.io.FileNotFoundException;
-
 import edu.wpi.first.wpilibj.RobotBase;
-import frc.robot.autonomous.Instruction;
-import frc.robot.autonomous.PatternAutonomous;
+import frc.robot.servos.ActuatorComponent;
 
 /**
  * Do NOT add any static variitables to this class, or any initialization at

@@ -8,21 +8,20 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Optional;
 
-import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
-
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.clp.CLPMotors;
 import frc.robot.events.ButtonEvent;
 import frc.robot.events.DpadEvent;
 import frc.robot.events.EventHandler;
 import frc.robot.events.SingleStickEvent;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PWMVictorSPX;
-import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import frc.robot.servos.Servos;
 
 /**
  * The VM is configured to automatically run this class, and to call the

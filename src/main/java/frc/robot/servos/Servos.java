@@ -1,4 +1,4 @@
-package frc.robot;
+package frc.robot.servos;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
