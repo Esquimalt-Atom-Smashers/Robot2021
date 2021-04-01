@@ -1,5 +1,6 @@
 package frc.robot.events;
 
+import java.util.Arrays;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
@@ -16,6 +17,11 @@ public interface EventHandler<T extends Event> {
     }
     default EventHandler<T> filter(Predicate<T> tester) {
         return Events.filter(tester, this);
+    }
+    default EventHandler<T> combine(EventHandler<T>... others) {
+        EventHandler<T>[] all = Arrays.copyOf(others, others.length + 1);
+        all[others.length] = this;
+        return Events.combine(all);
     }
 
     static <T extends Event> EventHandler<T> combineAndCreate(Consumer<T> receiver, Runnable otherwise) {

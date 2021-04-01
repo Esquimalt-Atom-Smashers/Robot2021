@@ -3,7 +3,7 @@ package frc.robot.events;
 import edu.wpi.first.wpilibj.Joystick;
 import frc.robot.Robot;
 
-abstract class JoystickEvent extends Event {
+public abstract class JoystickEvent extends Event {
 
     private final Joystick stick;
 

@@ -18,7 +18,7 @@ public abstract class ComponentBase {
     }
 
     /**
-     * This method will get called by the Robot.java class whenever it's teleopPeriodic methods is called.
+     * This method will get called by the Robot.java class whenever its teleopPeriodic methods is called.
      */
     public void teleopPeriodic() {}
 

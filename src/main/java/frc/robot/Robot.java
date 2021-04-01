@@ -4,9 +4,7 @@
 
 package frc.robot;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Optional;
+import java.util.*;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
@@ -14,10 +12,7 @@ import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.clp.CLPMotors;
-import frc.robot.events.ButtonEvent;
-import frc.robot.events.DpadEvent;
-import frc.robot.events.EventHandler;
-import frc.robot.events.SingleStickEvent;
+import frc.robot.events.*;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PWMVictorSPX;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
@@ -32,28 +27,27 @@ import frc.robot.servos.Servos;
  */
 public class Robot extends TimedRobot {
 
+    public static Robot getWithComponents(ComponentBase... components) {
+        Robot robot = new Robot();
+        robot.components.addAll(Arrays.asList(components));
+        return robot;
+    }
+
     // Some important variables
     private static final String kDefaultAuto = "Default";
     private static final String kCustomAuto = "My Auto";
 
     /**
-     * This variable controls whether or not the robot will ovveride the
-     * JOYSTICK_SLOT and instead looks through slots 0-10 looking for a valid
-     * joystick.
-     */
-    private static final boolean FIND_JOYSTICK_SLOT = false;
-    /**
-     * This variable controls the usb slot we look for the joystick in, if
-     * FIND_JOYSTICK_SLOT is true then this will only be used as a backup.
+     * This variable controls the slot the joystick is created from.
      */
     private static final int DEFAULT_JOYSTICK_SLOT = 3;
 
-    private final PWMVictorSPX m_leftMotor = new PWMVictorSPX(1);
-    private final PWMVictorSPX m_rightMotor = new PWMVictorSPX(3);
-    private final DifferentialDrive m_robotDrive = new DifferentialDrive(m_leftMotor, m_rightMotor);
+    private final PWMVictorSPX leftMotor = new PWMVictorSPX(1);
+    private final PWMVictorSPX rightMotor = new PWMVictorSPX(3);
+    private final DifferentialDrive robotDrive = new DifferentialDrive(leftMotor, rightMotor);
 
-    private Joystick m_stick;
-    private XboxController xboxController = new XboxController(DEFAULT_JOYSTICK_SLOT);
+    private final Joystick stick = new Joystick(DEFAULT_JOYSTICK_SLOT);
+    private final XboxController xboxController = new XboxController(DEFAULT_JOYSTICK_SLOT);
 
     private final CLPMotors clpMotors = new CLPMotors(6);
     private final Servos actuatorServos = new Servos(7, 8, 9, 0);
@@ -61,6 +55,8 @@ public class Robot extends TimedRobot {
     /***************************
      * Event Variables
      ***************************/
+    private final ArrayList<EventHandler<ButtonEvent>> buttonHandlers = new ArrayList<>();
+    private final ArrayList<EventHandler<DpadEvent>> dpadHandlers = new ArrayList<>();
     private final HashMap<Integer, EventHandler<ButtonEvent>> eventMap = new HashMap<>();
     private EventHandler<SingleStickEvent> leftStickHandler;
     private EventHandler<SingleStickEvent> rightStickHandler;
@@ -82,20 +78,6 @@ public class Robot extends TimedRobot {
         m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
         m_chooser.addOption("My Auto", kCustomAuto);
         SmartDashboard.putData("Auto choices", m_chooser);
-        if (FIND_JOYSTICK_SLOT) {
-            // This loop looks for a joystick in slots 0-10 breaking if it finds one and
-            // using the slot specified in DEFAULT_JOYSTICK_SLOT if none is found.
-            for (int i = 0; i < 10; i++) {
-                m_stick = new Joystick(i);
-                if (m_stick != null) {
-                    break;
-                } else if (i == 9) {
-                    m_stick = new Joystick(DEFAULT_JOYSTICK_SLOT);
-                }
-            }
-        } else {
-            m_stick = new Joystick(DEFAULT_JOYSTICK_SLOT);
-        }
     }
 
     /**
@@ -165,33 +147,46 @@ public class Robot extends TimedRobot {
 
         // This loop is used to properly activate the event handlers in the button map.
         for (int key : eventMap.keySet()) {
-            if (m_stick.getRawButton(key)) {
-                eventMap.get(key).receive(new ButtonEvent(this, m_stick, key));
+            if (stick.getRawButton(key)) {
+                eventMap.get(key).receive(new ButtonEvent(this, stick, key));
             } else {
                 eventMap.get(key).otherwise();
             }
         }
+        if (!buttonHandlers.isEmpty()) {
+            boolean executed = false;
+            for (int i = 0; i < stick.getButtonCount(); i++) {
+                if (stick.getRawButton(i)) {
+                    int finalI = i;
+                    buttonHandlers.forEach(handler -> handler.receive(new ButtonEvent(this, stick, finalI)));
+                    executed = true;
+                }
+            }
+            if (!executed) {
+                buttonHandlers.forEach(EventHandler::otherwise);
+            }
+        }
 
         if (leftStickHandler != null) {
-            if (m_stick.getY() != 0 || m_stick.getX() != 0) {
-                leftStickHandler.receive(new SingleStickEvent(this, m_stick, m_stick.getY(), m_stick.getX()));
+            if (stick.getY() != 0 || stick.getX() != 0) {
+                leftStickHandler.receive(new SingleStickEvent(this, stick, stick.getY(), stick.getX()));
             } else {
                 leftStickHandler.otherwise();
             }
         }
 
         if (rightStickHandler != null) {
-            if (m_stick.getY(Hand.kLeft) != 0 || m_stick.getX(Hand.kLeft) != 0) {
+            if (stick.getY(Hand.kLeft) != 0 || stick.getX(Hand.kLeft) != 0) {
                 rightStickHandler.receive(
-                        new SingleStickEvent(this, m_stick, m_stick.getY(Hand.kLeft), m_stick.getX(Hand.kLeft)));
+                        new SingleStickEvent(this, stick, stick.getY(Hand.kLeft), stick.getX(Hand.kLeft)));
             } else {
                 rightStickHandler.otherwise();
             }
         }
 
         if (dpadHandler != null) {
-            if (m_stick.getPOV() != -1) {
-                dpadHandler.receive(new DpadEvent(this, m_stick, m_stick.getPOV()));
+            if (stick.getPOV() != -1) {
+                dpadHandler.receive(new DpadEvent(this, stick, stick.getPOV()));
             } else {
                 dpadHandler.otherwise();
             }
@@ -236,7 +231,7 @@ public class Robot extends TimedRobot {
      * @param rotation   the amount the robot will rotate
      */
     public void move(double moveAmount, double rotation) {
-        m_robotDrive.arcadeDrive(moveAmount, rotation);
+        robotDrive.arcadeDrive(moveAmount, rotation);
     }
 
     /**
@@ -244,7 +239,7 @@ public class Robot extends TimedRobot {
      * @return The joystick which is created from the slot: JOYSTICK_SLOT
      */
     public Joystick getJoystick() {
-        return m_stick;
+        return stick;
     }
 
     public XboxController getXboxController() {
@@ -257,15 +252,15 @@ public class Robot extends TimedRobot {
      *         motors.
      */
     public DifferentialDrive getDifferentialDrive() {
-        return m_robotDrive;
+        return robotDrive;
     }
 
     public PWMVictorSPX getLeftMotor() {
-        return m_leftMotor;
+        return leftMotor;
     }
 
     public PWMVictorSPX getRightMotor() {
-        return m_rightMotor;
+        return rightMotor;
     }
 
     public CLPMotors getClpMotors() {
@@ -292,12 +287,40 @@ public class Robot extends TimedRobot {
         this.leftStickHandler = handler;
     }
 
+    public EventHandler<SingleStickEvent> getOnLeftStickMoved() {
+        return leftStickHandler;
+    }
+
     public void setOnRightStickMoved(EventHandler<SingleStickEvent> handler) {
         this.rightStickHandler = handler;
     }
 
+    public EventHandler<SingleStickEvent> getOnRightStickMoved() {
+        return rightStickHandler;
+    }
+
     public void setOnDpadMoved(EventHandler<DpadEvent> dpadEventHandler) {
         this.dpadHandler = dpadEventHandler;
+    }
+
+    public EventHandler<DpadEvent> getOnDpadMoved() {
+        return dpadHandler;
+    }
+
+    public void addButtonHandler(EventHandler<ButtonEvent> handler) {
+        buttonHandlers.add(handler);
+    }
+
+    public void removeButtonHandler(EventHandler<ButtonEvent> handler) {
+        buttonHandlers.remove(handler);
+    }
+
+    public void addDpadHandler(EventHandler<DpadEvent> handler) {
+        dpadHandlers.add(handler);
+    }
+
+    public void removeDpadHandler(EventHandler<DpadEvent> handler) {
+        dpadHandlers.remove(handler);
     }
 
 }

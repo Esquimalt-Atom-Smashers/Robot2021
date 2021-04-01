@@ -12,6 +12,10 @@ public class ButtonEvent extends JoystickEvent {
         this.button = pressed;
     }
 
+    public static EventHandler<ButtonEvent> handler(Runnable o) {
+        return event -> o.run();
+    }
+
     public int getButton() {
         return button;
     }
