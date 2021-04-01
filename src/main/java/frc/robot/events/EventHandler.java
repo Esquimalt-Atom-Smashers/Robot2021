@@ -1,6 +1,7 @@
 package frc.robot.events;
 
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 public interface EventHandler<T extends Event> {
 
@@ -10,8 +11,15 @@ public interface EventHandler<T extends Event> {
 
     }
 
-    public static <T extends Event> EventHandler<T> combine(Consumer<T> receiver, Runnable otherwise) {
-        return new EventHandler<T>(){
+    default EventHandler<T> delay(int delay) {
+        return Events.delay(delay, this);
+    }
+    default EventHandler<T> filter(Predicate<T> tester) {
+        return Events.filter(tester, this);
+    }
+
+    static <T extends Event> EventHandler<T> combineAndCreate(Consumer<T> receiver, Runnable otherwise) {
+        return new EventHandler<>(){
 
             @Override
             public void receive(T event) {

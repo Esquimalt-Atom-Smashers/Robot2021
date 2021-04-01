@@ -14,7 +14,7 @@ public final class Events {
      */
     public static <T extends Event> EventHandler<T> delay(int delay, final EventHandler<T> handler) {
         AtomicInteger times = new AtomicInteger();
-        return new EventHandler<T>(){
+        return new EventHandler<>(){
 
             @Override
             public void receive(T event) {
@@ -35,7 +35,7 @@ public final class Events {
     }
 
     public static <T extends Event> EventHandler<T> filter(Predicate<T> tester, final EventHandler<T> handler) {
-        return new EventHandler<T>(){
+        return new EventHandler<>() {
 
             @Override
             public void receive(T event) {
@@ -50,7 +50,30 @@ public final class Events {
             public void otherwise() {
                 handler.otherwise();
             }
-            
+
+        };
+    }
+
+    @SafeVarargs
+    public static <T extends Event> EventHandler<T> combine(EventHandler<T>... handlers) {
+        return new EventHandler<>() {
+
+            @Override
+            public void receive(T event) {
+                for (EventHandler<T> handler : handlers) {
+                    handler.receive(event);
+                    if (event.isConsumed())
+                        break;
+                }
+            }
+
+            @Override
+            public void otherwise() {
+                for (EventHandler<T> handler : handlers) {
+                    handler.otherwise();
+                }
+            }
+
         };
     }
     

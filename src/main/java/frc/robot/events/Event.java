@@ -5,6 +5,7 @@ import frc.robot.Robot;
 public abstract class Event {
     
     private final Robot robot;
+    private boolean consumed = false;
 
     Event(Robot robot) {
         this.robot = robot;
@@ -14,4 +15,11 @@ public abstract class Event {
         return robot;
     }
 
+    public boolean isConsumed() {
+        return consumed;
+    }
+
+    public void consumed() {
+        this.consumed = true;
+    }
 }
