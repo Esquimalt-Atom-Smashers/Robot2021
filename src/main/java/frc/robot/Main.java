@@ -7,10 +7,11 @@ package frc.robot;
 import edu.wpi.first.wpilibj.RobotBase;
 import frc.robot.servos.ActuatorComponent;
 
+import java.util.function.Supplier;
+
 /**
- * Do NOT add any static variitables to this class, or any initialization at
- * all. Unless you know what you are doing, do not modify this file except to
- * change the parameter class to the startRobot call.
+ * WPILib doesn't want you to add stuff to here, that's because they do many things behind-the-scenes before starting the program.
+ * If you want to do code in here do so under Main -> Robot#startRobot(Supplier)
  */
 public final class Main {
 
@@ -18,10 +19,7 @@ public final class Main {
     }
 
     /**
-     * Main initialization function. Do not perform any initialization here.
-     *
-     * <p>
-     * If you change your main robot class, change the parameter type.
+     * Main initialization function.
      */
     public static void main(String... args) {
 

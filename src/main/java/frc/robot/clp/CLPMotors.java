@@ -7,6 +7,7 @@ import java.util.List;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
+// TODO javadoc comments for this class
 public class CLPMotors {
 
     private final List<WPI_VictorSPX> motors = new ArrayList<>();

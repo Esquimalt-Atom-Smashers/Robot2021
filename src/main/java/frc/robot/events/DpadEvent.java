@@ -3,9 +3,7 @@ package frc.robot.events;
 import edu.wpi.first.wpilibj.Joystick;
 import frc.robot.Robot;
 
-/**
- * DpadEvent
- */
+// TODO javadoc comments for this class
 public class DpadEvent extends JoystickEvent {
 
     private final double value;

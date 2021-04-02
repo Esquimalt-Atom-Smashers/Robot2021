@@ -1,18 +1,34 @@
 package frc.robot;
 
 /**
- * This class is used to create a component which interacts with the Robot specified in the contsrtucor.
- * To implement this class create a class which extends this and implement all the methods.
- * These methods will be called when their corresponding methods are called on the Robot class.
+ * <p>
+ *     This class is used to create a component which interacts with the Robot specified in the constructor.
+ * </p>
+ * <p>
+ *     To implement this class create a class which extends this and implement all the methods which you will use.
+ *     These methods will be called when their corresponding methods are called on the Robot class.
+ * </p>
+ * <p>
+ *     You can also implement functionality onto the robot with the {@link Robot}'s event system.
+ *     If you wish to do so, you should probably do so in the constructor.
+ * </p>
  */
 public abstract class ComponentBase {
 
+    /** The robot defined in the constructor. */
     protected final Robot robot;
 
+    /**
+     *
+     * @param robot The robot which this will be attached to.
+     */
     public ComponentBase(Robot robot) {
         this.robot = robot;
     }
 
+    /**
+     * @return The robot defined in the constructor.
+     */
     public Robot getRobot() {
         return robot;
     }
@@ -26,5 +42,9 @@ public abstract class ComponentBase {
      * This method will get called once when the program starts and then once every time the robot gets re-enabled.
      */
     public void enabled() {}
+
+    public void attach() {
+        robot.addComponent(this);
+    }
     
 }

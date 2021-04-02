@@ -2,6 +2,7 @@ package frc.robot.autonomous.pattern;
 
 import frc.robot.Robot;
 
+// TODO javadoc comments for this class
 public class WaitInstruction extends Instruction {
 
     private int waitTime;

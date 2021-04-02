@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
+// TODO javadoc comments for this class
 public interface EventHandler<T extends Event> {
 
     void receive(T event);

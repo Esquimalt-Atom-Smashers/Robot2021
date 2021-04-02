@@ -3,6 +3,7 @@ package frc.robot.events;
 import edu.wpi.first.wpilibj.Joystick;
 import frc.robot.Robot;
 
+// TODO javadoc comments for this class
 public class ButtonEvent extends JoystickEvent {
 
     private final int button;

@@ -19,13 +19,45 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import frc.robot.servos.Servos;
 
 /**
- * The VM is configured to automatically run this class, and to call the
- * functions corresponding to each mode, as described in the TimedRobot
- * documentation. If you change the name of this class or the package after
- * creating this project, you must also update the build.gradle file in the
- * project.
+ * This class contains the following important objects:
+ * <li>
+ *     The Joystick which is plugged into the computer running the robot, get with: {@link Robot#getJoystick()}
+ * </li>
+ * <li>
+ *     The left and right motors for the robot's drive base, these can be controlled simultaneously with a differential driver. Get left and right motor with: {@link Robot#getLeftMotor()}
+ *     and {@link Robot#getRightMotor()}, get the differential driver with {@link Robot#getDifferentialDrive()}. If you just wish to move or rotate the robot use the {@link Robot#move(double, double)} method.
+ * </li>
+ * <li>
+ *     A group of motor controller which are used for the CLP are stored in a {@link CLPMotors} object, this class provides many methods which would exist on a single motor object but applies them to all it's
+ *     motors. Get the CLPMotors with {@link Robot#getClpMotors()}
+ * </li>
+ * <li>
+ *     A list of servos which control the linear actuators that control the CLP. These servos are contained in a {@link Servos} object, this class provides implementation of many of the methods a single servo
+ *     has but applies them to all its servos. Get the Servos with {@link Robot#getActuatorServos()}
+ * </li>
+ * <h2>Components</h3>
+ * <p>
+ *     In previous years we have put large portions of the code which controls the robot into the Robot class. Although this practice does have some upsides (namely that it's easy to do) it also leads
+ *     to issues with readability and code-reusability.
+ * </p>
+ * <p>
+ *     This project attempts to fix this issue by moving the code into separate components, all of which extend the {@link ComponentBase} class. This class contains many methods which the Robot class also contains,
+ *     whenever these methods are called on the robot they are also called on its components. To add a component to the robot use the: {@link Robot#addComponent(ComponentBase)} method.
+ * </p>
+ * <h2>Events</h3>
+ * <h3>Limitations of the Components system.</h4>
+ * <p>
+ *     Many components are created that do some of the same things, for example: there are multiple components that do something when a button is pressed. This brings up two issues: firstly that there is little
+ *     communication between components, and secondly that the code for doing something when a button is pressed is repeated many times over several components.
+ * </p>
+ * <h3>The event system</h3>
+ * <p>
+ *     The event system fixes this issue by storing variables for doing certain actions, these variables contain {@link EventHandler}s which get triggered when their respective events get called. One of these variables
+ *     is the {@link Robot#eventMap}, this hashmap contains a map of integers and EventHandlers. Whenever a button is pressed, if there is a value in the {@code eventMap} that corresponds to the pressed button then
+ *     that event handler receives the event, otherwise it gets its {@link EventHandler#otherwise()} method called. For an example of the event system in use see: {@link Events}
+ * </p>
  */
-public class Robot extends TimedRobot {
+public class Robot /* Do not change class name */ extends TimedRobot {
 
     public static Robot getWithComponents(ComponentBase... components) {
         Robot robot = new Robot();
@@ -37,34 +69,46 @@ public class Robot extends TimedRobot {
     private static final String kDefaultAuto = "Default";
     private static final String kCustomAuto = "My Auto";
 
-    /**
-     * This variable controls the slot the joystick is created from.
-     */
+    /** This variable controls the slot the joystick is created from.*/
     private static final int DEFAULT_JOYSTICK_SLOT = 3;
 
+    /** The motor controller plugged into the 1 slot, this should be the left motor controller. */
     private final PWMVictorSPX leftMotor = new PWMVictorSPX(1);
+    /** The motor controller plugged into the 3 slot, this should be the right motor controller. */
     private final PWMVictorSPX rightMotor = new PWMVictorSPX(3);
+    /** A Differential driver which contains the {@link Robot#leftMotor} and {@link Robot#rightMotor}. */
     private final DifferentialDrive robotDrive = new DifferentialDrive(leftMotor, rightMotor);
 
+    /** A Joystick pulled from the port specified in {@link Robot#DEFAULT_JOYSTICK_SLOT}.  */
     private final Joystick stick = new Joystick(DEFAULT_JOYSTICK_SLOT);
+    /** This just exists for situations where you want to process the {@link Robot#stick} as an XboxController. Will probably be removed in a future version. */
     private final XboxController xboxController = new XboxController(DEFAULT_JOYSTICK_SLOT);
 
+    /** A list of motor controllers used to control the CLP */
     private final CLPMotors clpMotors = new CLPMotors(6);
+    /** A list of servos used to control the linear actuators. */
     private final Servos actuatorServos = new Servos(7, 8, 9, 0);
 
-    /***************************
-     * Event Variables
-     ***************************/
+    /* ************************* *
+     *      Event Variables
+     * ************************* */
+    /** A list of button event handlers that get called if a button is down in {@link Robot#teleopPeriodic()} */
     private final ArrayList<EventHandler<ButtonEvent>> buttonHandlers = new ArrayList<>();
+    /** A list of dpad event handlers that get called if the dpad isn't in its default position. Gets called in {@link Robot#teleopPeriodic()} */
     private final ArrayList<EventHandler<DpadEvent>> dpadHandlers = new ArrayList<>();
+    /** A map of integers that represent button indexes on a joystick. These are tested with {@link Joystick#getRawButton(int)}, if the method returns true (the button is down) then the event handler receives a ButtonEvent. Gets called in {@link Robot#teleopPeriodic()}  */
     private final HashMap<Integer, EventHandler<ButtonEvent>> eventMap = new HashMap<>();
+    /** An event handler that receives a SingleStickEvent whenever the left joystick on the controller isn't in its original position. Gets called in {@link Robot#teleopPeriodic()} */
     private EventHandler<SingleStickEvent> leftStickHandler;
+    /** An event handler that receives a SingleStickEvent whenever the right joystick on the controller isn't in its original position. Gets called in {@link Robot#teleopPeriodic()}  */
     private EventHandler<SingleStickEvent> rightStickHandler;
+    /** An event handler that receives a DpadEvent whenever the dpad on the joystick isn't in its original position. Gets called in {@link Robot#teleopPeriodic()} */
     private EventHandler<DpadEvent> dpadHandler;
 
     private String m_autoSelected;
     private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
+    /** The list of components which the robot delegates work to, see: {@link Robot}, {@link Robot#addComponent(ComponentBase)} and {@link ComponentBase} */
     private final ArrayList<ComponentBase> components = new ArrayList<>();
 
     private boolean disabled = true;
@@ -216,8 +260,7 @@ public class Robot extends TimedRobot {
     }
 
     /**
-     * This method is used to add a component to the Robot.
-     * 
+     * This method is used to add a component to the Robot. The added component will have its methods called by the equivalent methods in Robot.java.
      * @param component - The component you are adding to the robot.
      */
     public void addComponent(ComponentBase component) {
@@ -226,7 +269,6 @@ public class Robot extends TimedRobot {
 
     /**
      * This method moves the robot using the DifferentialDrive by the given x and y
-     * 
      * @param moveAmount the amount the robot will move
      * @param rotation   the amount the robot will rotate
      */
@@ -235,19 +277,20 @@ public class Robot extends TimedRobot {
     }
 
     /**
-     * 
-     * @return The joystick which is created from the slot: JOYSTICK_SLOT
+     * @return The joystick which is created from the slot: {@link Robot#DEFAULT_JOYSTICK_SLOT}
      */
     public Joystick getJoystick() {
         return stick;
     }
 
+    /**
+     * @return The xbox controller created from the slot: {@link Robot#DEFAULT_JOYSTICK_SLOT}, will probably be removed in a later version.
+     */
     public XboxController getXboxController() {
         return xboxController;
     }
 
     /**
-     * 
      * @return The Differential Drive containing the drive base's left and right
      *         motors.
      */
@@ -255,70 +298,122 @@ public class Robot extends TimedRobot {
         return robotDrive;
     }
 
+    /**
+     * @return The robot's left motor controller.
+     */
     public PWMVictorSPX getLeftMotor() {
         return leftMotor;
     }
 
+    /**
+     * @return The robot's right motor controller.
+     */
     public PWMVictorSPX getRightMotor() {
         return rightMotor;
     }
 
+    /**
+     * @return The robot's clp motor controllers. The returned object's class contains a list of motor controllers as well as some convenience methods for running functions on all of the motor controllers in its list.
+     */
     public CLPMotors getClpMotors() {
         return clpMotors;
     }
 
+    /**
+     * @return The robot's servos. These servos are used to control the linear actuators that move the CLP up and down. The returned object's class contains a list of servos as well as some convenience methods for running actions on all the servos in its list.
+     */
     public Servos getActuatorServos() {
         return actuatorServos;
     }
 
+    /**
+     * This method is effectively the {@link HashMap#put(Object, Object)} method for the robot's {@link Robot#eventMap}
+     * @param button the button which needs to be pressed to activate the inputted event handler.
+     * @param handler the event handler which gets activated when the inputted button gets pressed.
+     */
     public void setOnButtonPressed(int button, EventHandler<ButtonEvent> handler) {
         eventMap.put(button, handler);
     }
 
+    /**
+     *
+     * @param button the key of the {@link Robot#eventMap} which is checked for an EventHandler.
+     * @return Either: an optional containing the button in the inputted key of the {@link Robot#eventMap}, or an empty Optional.
+     */
     public Optional<EventHandler<ButtonEvent>> getOnButtonPressed(int button) {
-        if (eventMap.containsKey(button)) {
-            return Optional.of(eventMap.get(button));
-        } else {
-            return Optional.empty();
-        }
+        return eventMap.containsKey(button) ? Optional.of(eventMap.get(button)) : Optional.empty();
     }
 
+    /**
+     * @param handler the event handler which will be called whenever the left joystick on the controller is pressed.
+     */
     public void setOnLeftStickMoved(EventHandler<SingleStickEvent> handler) {
         this.leftStickHandler = handler;
     }
 
+    /**
+     * @return the current value of the {@link Robot#leftStickHandler} variable. This can be null if the handler has been set to null or was never set.
+     */
     public EventHandler<SingleStickEvent> getOnLeftStickMoved() {
         return leftStickHandler;
     }
 
+    /**
+     * @param handler the event handler which will be called whenever the right joystick on the controller is pressed.
+     */
     public void setOnRightStickMoved(EventHandler<SingleStickEvent> handler) {
         this.rightStickHandler = handler;
     }
 
+    /**
+     * @return the current value of the {@link Robot#rightStickHandler} variable. This can be null if the handler has been set to null or was never set.
+     */
     public EventHandler<SingleStickEvent> getOnRightStickMoved() {
         return rightStickHandler;
     }
 
+    /**
+     * @param dpadEventHandler the event handler which will be called whenever the dpad isn't in its original position and the robot's {@link Robot#teleopPeriodic()} method is called.
+     */
     public void setOnDpadMoved(EventHandler<DpadEvent> dpadEventHandler) {
         this.dpadHandler = dpadEventHandler;
     }
 
+    /**
+     * @return the current value of the {@link Robot#dpadHandler} variable. This can be null if the handler has been set to null or was never set.
+     */
     public EventHandler<DpadEvent> getOnDpadMoved() {
         return dpadHandler;
     }
 
+    /**
+     * Adds an event handler to the robot's {@link Robot#buttonHandlers} list.
+     * @param handler the handler which gets added to the Robot's buttonHandlers.
+     */
     public void addButtonHandler(EventHandler<ButtonEvent> handler) {
         buttonHandlers.add(handler);
     }
 
+    /**
+     * Removes an event handler from the robot's {@link Robot#buttonHandlers} list.
+     * @param handler the handler which gets removed from the Robot's buttonHandlers.
+     */
     public void removeButtonHandler(EventHandler<ButtonEvent> handler) {
         buttonHandlers.remove(handler);
     }
 
+    /**
+     * Adds an event handler to the robot's {@link Robot#dpadHandler} list.
+     * @param handler the handler which gets added to the Robot's dpadHandlers.
+     */
     public void addDpadHandler(EventHandler<DpadEvent> handler) {
         dpadHandlers.add(handler);
     }
 
+    /**
+     * Removes an event handler from the robot's {@link Robot#dpadHandler} list.
+     * @param handler the handler which gets removed from the Robot's dpadHandler.
+     */
     public void removeDpadHandler(EventHandler<DpadEvent> handler) {
         dpadHandlers.remove(handler);
     }
