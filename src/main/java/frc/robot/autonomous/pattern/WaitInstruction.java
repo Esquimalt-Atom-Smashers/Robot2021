@@ -21,4 +21,7 @@ public class WaitInstruction extends Instruction {
         waitTime--;
     }
 
+    public int getWaitTime() {
+        return waitTime;
+    }
 }

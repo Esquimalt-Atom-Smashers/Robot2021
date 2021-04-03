@@ -15,7 +15,7 @@ import frc.robot.Robot;
  * This class takes a list of {@link frc.robot.autonomous.pattern.Instruction} in its
  * constructor then works its way through them until there are none left.
  */
-public class PatternAutonomous extends ComponentBase {
+public class InstructionAutonomous extends ComponentBase {
 
     private static final int START_BUTTON = 3;
     public static final double MOVE_AMOUNT = 1;
@@ -25,7 +25,7 @@ public class PatternAutonomous extends ComponentBase {
 
     private Instruction currentInstruction;
 
-    public PatternAutonomous(Robot bot, Instruction... defaultInstructions) {
+    public InstructionAutonomous(Robot bot, Instruction... defaultInstructions) {
         super(bot);
         originalInstructions.addAll(Arrays.asList(defaultInstructions));
         System.out.println(originalInstructions);
@@ -64,7 +64,7 @@ public class PatternAutonomous extends ComponentBase {
         return instructions;
     }
 
-    public static PatternAutonomous createFromInstructions(String instructions, Robot bot) {
+    public static InstructionAutonomous createFromInstructions(String instructions, Robot bot) {
         instructions = instructions.replaceAll("(#|\\/\\/)[^\n]+", "");
         System.out.println(instructions);
         ArrayList<Instruction> instructionsList = new ArrayList<>();
@@ -72,10 +72,10 @@ public class PatternAutonomous extends ComponentBase {
             Instruction instruction = Instruction.fromLine(line);
             instructionsList.add(instruction);
         }
-        return new PatternAutonomous(bot, instructionsList.toArray(new Instruction[0]));
+        return new InstructionAutonomous(bot, instructionsList.toArray(new Instruction[0]));
     }
 
-    public static PatternAutonomous createFromFile(String name, Robot bot) throws FileNotFoundException {
+    public static InstructionAutonomous createFromFile(String name, Robot bot) throws FileNotFoundException {
         File file = new File(Filesystem.getDeployDirectory().getPath() + "/" + name);
         Scanner scanner = new Scanner(file);
         StringBuilder text = new StringBuilder();

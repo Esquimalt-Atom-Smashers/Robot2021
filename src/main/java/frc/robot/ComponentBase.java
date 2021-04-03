@@ -37,6 +37,14 @@ public abstract class ComponentBase {
      * This method will get called by the Robot.java class whenever its teleopPeriodic methods is called.
      */
     public void teleopPeriodic() {}
+    public void autonomousPeriodic() {}
+    public void disabledPeriodic() {}
+    public void testPeriodic() {}
+
+    public void teleopInit() {}
+    public void autonomousInit() {}
+    public void disabledInit() {}
+    public void testInit() {}
 
     /**
      * This method will get called once when the program starts and then once every time the robot gets re-enabled.

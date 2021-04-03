@@ -160,11 +160,13 @@ public class Robot /* Do not change class name */ extends TimedRobot {
         m_autoSelected = m_chooser.getSelected();
         // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
         System.out.println("Auto selected: " + m_autoSelected);
+        components.forEach(ComponentBase::autonomousInit);
     }
 
     /** This function is called periodically during autonomous. */
     @Override
     public void autonomousPeriodic() {
+        components.forEach(ComponentBase::autonomousPeriodic);
         switch (m_autoSelected) {
             case kCustomAuto:
                 // Put custom auto code here
@@ -179,6 +181,7 @@ public class Robot /* Do not change class name */ extends TimedRobot {
     /** This function is called once when teleop is enabled. */
     @Override
     public void teleopInit() {
+        components.forEach(ComponentBase::teleopInit);
     }
 
     /** This function is called periodically during operator control. */
@@ -242,21 +245,25 @@ public class Robot /* Do not change class name */ extends TimedRobot {
     @Override
     public void disabledInit() {
         disabled = true;
+        components.forEach(ComponentBase::disabledInit);
     }
 
     /** This function is called periodically when disabled. */
     @Override
     public void disabledPeriodic() {
+        components.forEach(ComponentBase::disabledPeriodic);
     }
 
     /** This function is called once when test mode is enabled. */
     @Override
     public void testInit() {
+        components.forEach(ComponentBase::testInit);
     }
 
     /** This function is called periodically during test mode. */
     @Override
     public void testPeriodic() {
+        components.forEach(ComponentBase::testPeriodic);
     }
 
     /**

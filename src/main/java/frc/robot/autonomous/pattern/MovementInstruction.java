@@ -23,11 +23,18 @@ public class MovementInstruction extends Instruction {
 
     @Override
     public void activate(Robot robot) {
-        double moveAmount = Math.min(this.moveAmount, PatternAutonomous.MOVE_AMOUNT);
-        double rotateAmount = Math.min(this.rotateAmount, PatternAutonomous.MOVE_AMOUNT);
+        double moveAmount = Math.min(this.moveAmount, InstructionAutonomous.MOVE_AMOUNT);
+        double rotateAmount = Math.min(this.rotateAmount, InstructionAutonomous.MOVE_AMOUNT);
         this.moveAmount -= moveAmount;
         this.rotateAmount -= rotateAmount;
         robot.move(moveAmount, rotateAmount);
     }
 
+    public double getRotateAmount() {
+        return rotateAmount;
+    }
+
+    public double getMoveAmount() {
+        return moveAmount;
+    }
 }
