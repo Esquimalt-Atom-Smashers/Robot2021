@@ -6,6 +6,8 @@ package frc.robot;
 
 import java.util.*;
 
+import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
+
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
@@ -85,7 +87,8 @@ public class Robot /* Do not change class name */ extends TimedRobot {
     private final XboxController xboxController = new XboxController(DEFAULT_JOYSTICK_SLOT);
 
     /** A list of motor controllers used to control the CLP */
-    private final CLPMotors clpMotors = new CLPMotors(6);
+    private final CLPMotors clpMotors = new CLPMotors(1, 2, 6);
+    private final CLPMotors reversedMotors = new CLPMotors(5, 3, 4);
     /** A list of servos used to control the linear actuators. */
     private final Servos actuatorServos = new Servos(7, 8, 9, 0);
 
@@ -324,6 +327,10 @@ public class Robot /* Do not change class name */ extends TimedRobot {
      */
     public CLPMotors getClpMotors() {
         return clpMotors;
+    }
+
+    public CLPMotors getReversedMotors() {
+        return reversedMotors;
     }
 
     /**

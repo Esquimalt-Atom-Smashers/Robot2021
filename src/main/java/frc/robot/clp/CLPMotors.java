@@ -29,5 +29,9 @@ public class CLPMotors {
     public void set(double value) {
         this.motors.forEach(motor -> motor.set(value));
     }
+
+    public void set(int index, double value) {
+        this.motors.get(index).set(value);
+    }
     
 }

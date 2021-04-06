@@ -5,6 +5,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.RobotBase;
+import frc.robot.clp.CLPComponent;
 import frc.robot.servos.ActuatorComponent;
 
 import java.util.function.Supplier;
@@ -27,7 +28,7 @@ public final class Main {
             Robot robot = new Robot();
             robot.addComponent(new MovementComponent(robot));
             robot.addComponent(new ActuatorComponent(robot));
-            // robot.addComponent(new CLPComponent(robot));
+            robot.addComponent(new CLPComponent(robot));
             return robot;
         });
 
