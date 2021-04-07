@@ -17,7 +17,7 @@ import frc.robot.Robot;
  */
 public class InstructionAutonomous extends ComponentBase {
 
-    private static final int START_BUTTON = 3;
+    private static final int START_BUTTON = 2; // 2 = A button
     public static final double MOVE_AMOUNT = 1;
 
     private final ArrayList<Instruction> originalInstructions = new ArrayList<>();

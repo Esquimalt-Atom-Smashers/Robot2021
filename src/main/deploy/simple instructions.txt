@@ -17,6 +17,4 @@
 // Although this supports comments and simple instructions it isn't a coding language!!!
 // So don't try and do math or make a variable, that would just cause issues.
 
-rotate 50
-wait 100
-move 10
+

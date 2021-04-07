@@ -14,7 +14,8 @@ public class MovementComponent extends ComponentBase {
     @Override
     public void teleopPeriodic() {
         Joystick stick = robot.getJoystick();
-
+        //  -stick.getY() gives an error:
+        //CTR: Firm Vers could not be retrieved. Use Phoenix Tuner to check ID and firmware(CRF) version.
         robot.move(stick.getY(), ALTERNATE_ROTATE ? stick.getZ() : stick.getX());
 
         

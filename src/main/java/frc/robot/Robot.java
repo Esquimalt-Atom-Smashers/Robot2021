@@ -72,7 +72,7 @@ public class Robot /* Do not change class name */ extends TimedRobot {
     private static final String kCustomAuto = "My Auto";
 
     /** This variable controls the slot the joystick is created from.*/
-    private static final int DEFAULT_JOYSTICK_SLOT = 3;
+    private static final int DEFAULT_JOYSTICK_SLOT = 1; // change it form 3 to 1
 
     /** The motor controller plugged into the 1 slot, this should be the left motor controller. */
     private final PWMVictorSPX leftMotor = new PWMVictorSPX(1);
@@ -82,13 +82,14 @@ public class Robot /* Do not change class name */ extends TimedRobot {
     private final DifferentialDrive robotDrive = new DifferentialDrive(leftMotor, rightMotor);
 
     /** A Joystick pulled from the port specified in {@link Robot#DEFAULT_JOYSTICK_SLOT}.  */
-    private final Joystick stick = new Joystick(DEFAULT_JOYSTICK_SLOT);
+    private final Joystick stick = new Joystick(3); // DEFAULT_JOYSTICK_SLOT
     /** This just exists for situations where you want to process the {@link Robot#stick} as an XboxController. Will probably be removed in a future version. */
-    private final XboxController xboxController = new XboxController(DEFAULT_JOYSTICK_SLOT);
+    private final XboxController xboxController = new XboxController(DEFAULT_JOYSTICK_SLOT); //DEFAULT_JOYSTICK_SLOT
 
     /** A list of motor controllers used to control the CLP */
     private final CLPMotors clpMotors = new CLPMotors(1, 2, 6);
     private final CLPMotors reversedMotors = new CLPMotors(5, 3, 4);
+    private final WPI_VictorSPX shooterMotor = new WPI_VictorSPX(1);
     /** A list of servos used to control the linear actuators. */
     private final Servos actuatorServos = new Servos(7, 8, 9, 0);
 
@@ -331,6 +332,10 @@ public class Robot /* Do not change class name */ extends TimedRobot {
 
     public CLPMotors getReversedMotors() {
         return reversedMotors;
+    }
+
+    public WPI_VictorSPX getShooterMotor() {
+        return shooterMotor;
     }
 
     /**

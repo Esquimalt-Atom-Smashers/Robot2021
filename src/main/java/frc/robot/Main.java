@@ -5,14 +5,17 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.RobotBase;
+import frc.robot.autonomous.pattern.InstructionAutonomous;
 import frc.robot.clp.CLPComponent;
 import frc.robot.servos.ActuatorComponent;
 
+import java.io.FileNotFoundException;
 import java.util.function.Supplier;
 
 /**
- * WPILib doesn't want you to add stuff to here, that's because they do many things behind-the-scenes before starting the program.
- * If you want to do code in here do so under Main -> Robot#startRobot(Supplier)
+ * WPILib doesn't want you to add stuff to here, that's because they do many
+ * things behind-the-scenes before starting the program. If you want to do code
+ * in here do so under Main -> Robot#startRobot(Supplier)
  */
 public final class Main {
 
@@ -26,9 +29,14 @@ public final class Main {
 
         RobotBase.startRobot(() -> {
             Robot robot = new Robot();
-            robot.addComponent(new MovementComponent(robot));
-            robot.addComponent(new ActuatorComponent(robot));
-            robot.addComponent(new CLPComponent(robot));
+            // robot.addComponent(new MovementComponent(robot));
+            // robot.addComponent(new ActuatorComponent(robot));
+            // robot.addComponent(new CLPComponent(robot));
+            // try {
+            //     robot.addComponent(InstructionAutonomous.createFromFile("simple instsructions.txt", robot));
+            // } catch (FileNotFoundException e) {
+            //     e.printStackTrace();
+            // }
             return robot;
         });
 
