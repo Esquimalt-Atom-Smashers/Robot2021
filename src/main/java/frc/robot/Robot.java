@@ -89,6 +89,8 @@ public class Robot /* Do not change class name */ extends TimedRobot {
     /** A list of motor controllers used to control the CLP */
     private final CLPMotors clpMotors = new CLPMotors(1, 2, 6);
     private final CLPMotors reversedMotors = new CLPMotors(5, 3, 4);
+    private final WPI_VictorSPX intakeMotor1 = new WPI_VictorSPX(6);
+    private final WPI_VictorSPX intakeMotor2 = new WPI_VictorSPX(5);
     private final WPI_VictorSPX shooterMotor = new WPI_VictorSPX(1);
     /** A list of servos used to control the linear actuators. */
     private final Servos actuatorServos = new Servos(7, 8, 9, 0);
@@ -334,9 +336,18 @@ public class Robot /* Do not change class name */ extends TimedRobot {
         return reversedMotors;
     }
 
+    public WPI_VictorSPX getIntakeMotor1() {
+        return intakeMotor1;
+    }
+
+    public WPI_VictorSPX getIntakeMotor2() {
+        return intakeMotor2;
+    }
+
     public WPI_VictorSPX getShooterMotor() {
         return shooterMotor;
     }
+
 
     /**
      * @return The robot's servos. These servos are used to control the linear actuators that move the CLP up and down. The returned object's class contains a list of servos as well as some convenience methods for running actions on all the servos in its list.
