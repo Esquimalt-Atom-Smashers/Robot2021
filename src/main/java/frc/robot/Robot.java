@@ -76,10 +76,13 @@ public class Robot /* Do not change class name */ extends TimedRobot {
 
     /** The motor controller plugged into the 1 slot, this should be the left motor controller. */
     private final PWMVictorSPX leftMotor = new PWMVictorSPX(1);
+    private final PWMVictorSPX leftMotorSecondary = new PWMVictorSPX(2);
     /** The motor controller plugged into the 3 slot, this should be the right motor controller. */
     private final PWMVictorSPX rightMotor = new PWMVictorSPX(3);
+    private final PWMVictorSPX rightMotorSecondary = new PWMVictorSPX(4);
     /** A Differential driver which contains the {@link Robot#leftMotor} and {@link Robot#rightMotor}. */
     private final DifferentialDrive robotDrive = new DifferentialDrive(leftMotor, rightMotor);
+    private final DifferentialDrive robotDriveSecondary = new DifferentialDrive(rightMotor, rightMotorSecondary);
 
     /** A Joystick pulled from the port specified in {@link Robot#DEFAULT_JOYSTICK_SLOT}.  */
     private final Joystick stick = new Joystick(3); // DEFAULT_JOYSTICK_SLOT
@@ -285,6 +288,7 @@ public class Robot /* Do not change class name */ extends TimedRobot {
      */
     public void move(double moveAmount, double rotation) {
         robotDrive.arcadeDrive(moveAmount, rotation);
+        robotDriveSecondary.arcadeDrive(moveAmount, rotation);
     }
 
     /**
