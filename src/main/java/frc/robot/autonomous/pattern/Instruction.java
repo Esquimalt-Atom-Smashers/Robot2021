@@ -1,6 +1,7 @@
 package frc.robot.autonomous.pattern;
 
 import frc.robot.Robot;
+import frc.robot.autonomous.pattern.pathfinding.PathfindingInstruction;
 
 /**
  * This class is used to create an instruction which can be loaded into the PatternAutonomous class which will execute it.
@@ -34,6 +35,15 @@ public abstract class Instruction {
             Double amount = firstNumberParsingTime(portion);
             if (amount != null) {
                 wait = amount.intValue();
+            }
+        }
+        if (line.startsWith("goto ")) {
+            String portion = line.substring(5);
+            Double amount1 = firstNumber(portion);
+            Double amount2 = lastNumber(portion);
+            if (amount1 != null && amount2 != null) {
+                return new PathfindingInstruction(
+                        PathfindingInstruction.CURRENT_ROW, PathfindingInstruction.CURRENT_COLUMN, amount1.intValue(), amount2.intValue(), PathfindingInstruction.ANGLE);
             }
         }
         return Instruction.from(moveAmount, rotateAmount, wait, 0);
@@ -71,6 +81,18 @@ public abstract class Instruction {
         if (spaceSplit.length >= 1) {
             try {
                 return Double.parseDouble(spaceSplit[0]);
+            } catch (Exception ignore) {
+                return null;
+            }
+        }
+        return null;
+    }
+    private static Double lastNumber(String line) {
+        line = line.trim();
+        String[] spaceSplit = line.split(" ");
+        if (spaceSplit.length >= 1) {
+            try {
+                return Double.parseDouble(spaceSplit[spaceSplit.length - 1]);
             } catch (Exception ignore) {
                 return null;
             }

@@ -9,6 +9,7 @@
 #   wait 15               // Will wait for '15' (should be 30ms)
 #   rotate 20             // Will rotate the robot by '20'
 #   rotate 10 move -15    // Will rotate the robot by '10' while also moving it backwards by '15'
+#   goto 1 1
 
 // Note that there are no units, this is because of how the wpilib api works.
 // The units should (but tend not to) represent 2ms, so 10 = 20ms. 

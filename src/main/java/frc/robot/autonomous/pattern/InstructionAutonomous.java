@@ -28,7 +28,6 @@ public class InstructionAutonomous extends ComponentBase {
     public InstructionAutonomous(Robot bot, Instruction... defaultInstructions) {
         super(bot);
         originalInstructions.addAll(Arrays.asList(defaultInstructions));
-        System.out.println(originalInstructions);
     }
 
     @Override
