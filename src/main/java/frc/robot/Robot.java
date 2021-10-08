@@ -388,7 +388,7 @@ public class Robot /* Do not change class name */ extends TimedRobot {
     /**
      * @return the current value of the {@link Robot#leftStickHandler} variable. This can be null if the handler has been set to null or was never set.
      */
-    public EventHandler<SingleStickEvent> getOnLeftStickMoved() {
+    public EventHandler<SingleStickEvent> getOnLeftStickMoved() {   
         return leftStickHandler;
     }
 

@@ -22,9 +22,9 @@ public class CLPComponent extends ComponentBase {
         robot.setOnButtonPressed(4, event -> {
             robot.getReversedMotors().set(0, -1);
         });
-        robot.setOnButtonPressed(8, event -> { //trigger should be 8 but not sure
-            robot.getShooterMotor().set(1);
-        });
+        // robot.setOnButtonPressed(8, event -> { //trigger should be 8 but not sure
+        //     robot.getShooterMotor().set(1);
+        // });
         robot.setOnButtonPressed(7, event -> { //left trigger should be 7 but not sure 
             robot.getIntakeMotor1().set(1);
             robot.getIntakeMotor2().set(-1);
